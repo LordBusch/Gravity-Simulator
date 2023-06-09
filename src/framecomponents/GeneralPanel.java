@@ -1,8 +1,13 @@
 package framecomponents;
+
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 
-public class GeneralPanel extends JPanel {
+public class GeneralPanel extends JPanel implements ActionListener {
+
     JButton PauseButton = new JButton("Pause");
     JButton LoadButton = new JButton("Load");
     JButton SaveButton = new JButton("Save");
@@ -12,11 +17,16 @@ public class GeneralPanel extends JPanel {
     GridBagConstraints gbc = new GridBagConstraints();
 
     GeneralPanel() {
+        initialize();
+        setUpButtons();
+    }
+
+    private void initialize() {
         this.setLayout(layout);
         this.setBackground(Color.gray);
-        
-        //add components
-        gbc.insets = new Insets(3,3,3,3);
+
+        // add components
+        gbc.insets = new Insets(3, 3, 3, 3);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -29,5 +39,27 @@ public class GeneralPanel extends JPanel {
         gbc.gridy = 1;
         gbc.gridwidth = 3;
         this.add(PauseButton, gbc);
+    }
+
+    private void setUpButtons() {
+        PauseButton.addActionListener(this);
+        LoadButton.addActionListener(this);
+        SaveButton.addActionListener(this);
+        ResetButton.addActionListener(this);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == PauseButton) {
+            
+        }
+        if (e.getSource() == LoadButton) {
+            
+        }
+        if (e.getSource() == SaveButton) {
+            
+        }
+        if (e.getSource() == ResetButton) {
+            
+        }
     }
 }

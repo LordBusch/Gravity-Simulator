@@ -1,16 +1,27 @@
 package framecomponents;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 
-public class BodyCreationPanel extends JPanel {
+public class BodyCreationPanel extends JPanel implements ActionListener {
+    
     String[] options = {"Planet", "Asteroid"};
     JComboBox comboBox = new JComboBox(options);
+    JButton ChooseButton = new JButton("Choose");
+    JButton CreateButton = new JButton("Create");
 
     GridBagLayout layout = new GridBagLayout();
     GridBagConstraints gbc = new GridBagConstraints();
 
     BodyCreationPanel() {
+        initialize();
+        setUpButtons();
+    }
+
+    private void initialize() {
         Border blackline = BorderFactory.createTitledBorder("Body Creation");
         this.setBorder(blackline);
         this.setBackground(Color.gray);
@@ -49,7 +60,7 @@ public class BodyCreationPanel extends JPanel {
         gbc.gridy = 3;
         this.add(new JTextField(), gbc);
         gbc.gridy = 4;
-        this.add(new JButton("Choose"), gbc);
+        this.add(ChooseButton, gbc);
         gbc.gridy = 5;
         this.add(new JTextField(), gbc);
         gbc.gridy = 6;
@@ -59,6 +70,20 @@ public class BodyCreationPanel extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 8;
         gbc.gridwidth = 3;
-        this.add(new JButton("Create"), gbc);
+        this.add(CreateButton, gbc);
+    }
+
+    private void setUpButtons() {
+        ChooseButton.addActionListener(this);
+        CreateButton.addActionListener(this);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == ChooseButton) {
+            
+        }
+        if (e.getSource() == CreateButton) {
+            
+        }
     }
 }
