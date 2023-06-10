@@ -1,4 +1,5 @@
 package framecomponents;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,11 +8,12 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 public class BodyCreationPanel extends JPanel implements ActionListener {
-    
-    String[] options = {"Planet", "Asteroid"};
+
+    String[] options = { "Planet", "Asteroid" };
     JComboBox comboBox = new JComboBox(options);
     JButton ChooseButton = new JButton("Choose");
     JButton CreateButton = new JButton("Create");
+    JColorChooser ColorPicker = new JColorChooser();
 
     GridBagLayout layout = new GridBagLayout();
     GridBagConstraints gbc = new GridBagConstraints();
@@ -28,10 +30,10 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
         this.setLayout(layout);
         this.add(comboBox);
 
-        //add components
-        //left side
+        // add components
+        // left side
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = new Insets(3,3,3,50);
+        gbc.insets = new Insets(3, 3, 3, 50);
         gbc.gridx = 0;
         gbc.gridy = 0;
         this.add(new JLabel("Type:"), gbc);
@@ -48,8 +50,8 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
         gbc.gridy = 6;
         this.add(new JLabel("Y:"), gbc);
 
-        //right side
-        gbc.insets = new Insets(3,3,3,3);
+        // right side
+        gbc.insets = new Insets(3, 3, 3, 3);
         gbc.gridy = 0;
         gbc.gridx = 1;
         this.add(comboBox, gbc);
@@ -66,7 +68,7 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
         gbc.gridy = 6;
         this.add(new JTextField(), gbc);
 
-        //bottom
+        // bottom
         gbc.gridx = 0;
         gbc.gridy = 8;
         gbc.gridwidth = 3;
@@ -78,12 +80,24 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
         CreateButton.addActionListener(this);
     }
 
+    private boolean choose = false;
+
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == ChooseButton) {
-            
+            if (choose) {
+                this.remove(ColorPicker);
+                choose = false;
+            } else {
+                gbc.gridx = 2;
+                gbc.gridy = 4;
+                gbc.gridwidth = 1;
+                this.add(ColorPicker, gbc);
+                choose = true;
+            }
+            this.revalidate();
         }
         if (e.getSource() == CreateButton) {
-            
+
         }
     }
 }
