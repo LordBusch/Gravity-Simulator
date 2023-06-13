@@ -7,7 +7,11 @@ import java.text.NumberFormat;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.NumberFormatter;
+
+import bodies.MainBody;
+import bodies.SecondaryBody;
 
 public class BodyCreationPanel extends JPanel implements ActionListener {
 
@@ -65,15 +69,15 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
         gbc.gridx = 1;
         this.add(comboBox, gbc);
         gbc.gridy = 1;
-        this.add(new JFormattedTextField(formatter), gbc);
+        this.add(MassTF, gbc);
         gbc.gridy = 2;
-        this.add(new JFormattedTextField(formatter), gbc);
+        this.add(RadiusTF, gbc);
         gbc.gridy = 4;
         this.add(ChooseButton, gbc);
         gbc.gridy = 5;
-        this.add(new JFormattedTextField(formatter), gbc);
+        this.add(XTF, gbc);
         gbc.gridy = 6;
-        this.add(new JFormattedTextField(formatter), gbc);
+        this.add(YTF, gbc);
 
         // bottom
         gbc.gridx = 0;
@@ -82,7 +86,11 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
         this.add(CreateButton, gbc);
     }
 
-    JFormattedTextField VelocityTextField = new JFormattedTextField(formatter);
+    JFormattedTextField MassTF = new JFormattedTextField(formatter);
+    JFormattedTextField RadiusTF = new JFormattedTextField(formatter);
+    JFormattedTextField VelocityTF = new JFormattedTextField(formatter);
+    JFormattedTextField XTF = new JFormattedTextField(formatter);
+    JFormattedTextField YTF = new JFormattedTextField(formatter);
     JLabel VelocityLabel = new JLabel("Velocity");
 
     private void updateVelocityUI() {
@@ -91,10 +99,10 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
             gbc.gridy = 3;
             this.add(VelocityLabel, gbc);
             gbc.gridx = 1;
-            this.add(VelocityTextField, gbc);
+            this.add(VelocityTF, gbc);
         } else {
             this.remove(VelocityLabel);
-            this.remove(VelocityTextField);
+            this.remove(VelocityTF);
         }
         this.repaint();
         this.revalidate();
@@ -129,7 +137,31 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
             this.revalidate();
         }
         if (e.getSource() == CreateButton) {
-
+            if (String.valueOf(comboBox.getSelectedItem()) == options[1]) {
+                // if no necessary value is emtpy, create new secondaryBody
+                try {
+                    if (MassTF.getText() != null && RadiusTF.getText() != null && VelocityTF.getText() != null && XTF.getText() != null && YTF.getText() != null) {
+                        new SecondaryBody(Integer.valueOf(VelocityTF.getText()), Integer.valueOf(MassTF.getText()),
+                                Integer.valueOf(RadiusTF.getText()), Integer.valueOf(XTF.getText()),
+                                Integer.valueOf(YTF.getText()), ColorPicker.getColor());
+                    }
+                } catch (NumberFormatException e1) {
+                    //error message
+                    System.out.println("FAILED");
+                }
+            } else {
+                // if no necessary value is emtpy, create new mainBody
+                try {
+                    if (MassTF.getText() != null && RadiusTF.getText() != null && XTF.getText() != null && YTF.getText() != null) {
+                        new MainBody(Integer.valueOf(MassTF.getText()),
+                                Integer.valueOf(RadiusTF.getText()), Integer.valueOf(XTF.getText()),
+                                Integer.valueOf(YTF.getText()), ColorPicker.getColor());
+                    }
+                } catch (NumberFormatException e1) {
+                    //error message
+                    System.out.println("FAILED");
+                }
+            }
         }
     }
 }
