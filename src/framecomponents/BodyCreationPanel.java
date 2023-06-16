@@ -7,7 +7,6 @@ import java.text.NumberFormat;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.NumberFormatter;
 
 import bodies.MainBody;
@@ -141,9 +140,10 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
                 // if no necessary value is emtpy, create new secondaryBody
                 try {
                     if (MassTF.getText() != null && RadiusTF.getText() != null && VelocityTF.getText() != null && XTF.getText() != null && YTF.getText() != null) {
-                        new SecondaryBody(Integer.valueOf(VelocityTF.getText()), Integer.valueOf(MassTF.getText()),
+                        SecondaryBody body = new SecondaryBody(Integer.valueOf(VelocityTF.getText()), Integer.valueOf(MassTF.getText()),
                                 Integer.valueOf(RadiusTF.getText()), Integer.valueOf(XTF.getText()),
                                 Integer.valueOf(YTF.getText()), ColorPicker.getColor());
+                        SpaceView.secondaryBodyList.add(body);
                     }
                 } catch (NumberFormatException e1) {
                     //error message
@@ -153,9 +153,10 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
                 // if no necessary value is emtpy, create new mainBody
                 try {
                     if (MassTF.getText() != null && RadiusTF.getText() != null && XTF.getText() != null && YTF.getText() != null) {
-                        new MainBody(Integer.valueOf(MassTF.getText()),
+                        MainBody body = new MainBody(Integer.valueOf(MassTF.getText()),
                                 Integer.valueOf(RadiusTF.getText()), Integer.valueOf(XTF.getText()),
                                 Integer.valueOf(YTF.getText()), ColorPicker.getColor());
+                        SpaceView.mainBodyList.add(body);
                     }
                 } catch (NumberFormatException e1) {
                     //error message
