@@ -20,4 +20,32 @@ public class MainBody {
     public int getMass() {
         return this.mass;
     }
+    public int getRadius() {
+        return this.radius;
+    }
+    public int getX() {
+        return this.x;
+    }
+    public int getY() {
+        return this.y;
+    }
+    public Color getColor() {
+        return this.color;
+    }
+
+    public void setMass(int x) {
+        this.mass = x;
+    }
+    public void setRadius(int x) {
+        this.radius = x;
+    }
+    public void setX(int x) {
+        this.x = x;
+    }
+    public void setY(int x) {
+        this.y = x;
+    }
+    public void setColor(Color x) {
+        this.color = x;
+    }
 }
