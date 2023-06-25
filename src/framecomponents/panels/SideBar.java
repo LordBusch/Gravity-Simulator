@@ -1,9 +1,9 @@
-package framecomponents;
+package framecomponents.panels;
 import java.awt.*;
 import javax.swing.*;
 
 public class SideBar extends JPanel {
-    SideBar() {
+    public SideBar() {
         initialize();
     }
 

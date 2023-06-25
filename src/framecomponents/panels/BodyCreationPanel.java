@@ -1,4 +1,4 @@
-package framecomponents;
+package framecomponents.panels;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -143,7 +143,7 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
                         SecondaryBody body = new SecondaryBody(Integer.valueOf(VelocityTF.getText()), Integer.valueOf(MassTF.getText()),
                                 Integer.valueOf(RadiusTF.getText()), Integer.valueOf(XTF.getText()),
                                 Integer.valueOf(YTF.getText()), ColorPicker.getColor());
-                        SpaceView.secondaryBodyList.add(body);
+                        Simulation.secondaryBodyList.add(body);
                     }
                 } catch (NumberFormatException e1) {
                     //error message
@@ -156,7 +156,7 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
                         MainBody body = new MainBody(Integer.valueOf(MassTF.getText()),
                                 Integer.valueOf(RadiusTF.getText()), Integer.valueOf(XTF.getText()),
                                 Integer.valueOf(YTF.getText()), ColorPicker.getColor());
-                        SpaceView.mainBodyList.add(body);
+                        Simulation.mainBodyList.add(body);
                     }
                 } catch (NumberFormatException e1) {
                     //error message

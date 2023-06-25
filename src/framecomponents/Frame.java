@@ -3,6 +3,9 @@ package framecomponents;
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 
+import framecomponents.panels.SideBar;
+import framecomponents.panels.Simulation;
+
 public class Frame extends JFrame {
     public Frame() {
         initialize();
@@ -12,7 +15,7 @@ public class Frame extends JFrame {
         JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 
         splitpane.setLeftComponent(new SideBar());
-        splitpane.setRightComponent(new SpaceView());
+        splitpane.setRightComponent(new Simulation());
         
         this.setTitle("Gravity Simulator");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -1,4 +1,4 @@
-package framecomponents;
+package framecomponents.panels;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
