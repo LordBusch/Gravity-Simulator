@@ -3,13 +3,13 @@ package bodies;
 import java.awt.Color;
 
 public class MainBody {
-    private int mass;
-    private int radius;
-    private int x;
-    private int y;
+    private double mass;
+    private double radius;
+    private double x;
+    private double y;
     private Color color;
 
-    public MainBody(int mass, int radius, int x, int y, Color color) {
+    public MainBody(double mass, double radius, double x, double y, Color color) {
         this.mass = mass;
         this.radius = radius;
         this.x = x;
@@ -17,32 +17,32 @@ public class MainBody {
         this.color = color;
     }
 
-    public int getMass() {
+    public double getMass() {
         return this.mass;
     }
-    public int getRadius() {
+    public double getRadius() {
         return this.radius;
     }
-    public int getX() {
+    public double getX() {
         return this.x;
     }
-    public int getY() {
+    public double getY() {
         return this.y;
     }
     public Color getColor() {
         return this.color;
     }
 
-    public void setMass(int x) {
+    public void setMass(double x) {
         this.mass = x;
     }
-    public void setRadius(int x) {
+    public void setRadius(double x) {
         this.radius = x;
     }
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
-    public void setY(int x) {
+    public void setY(double x) {
         this.y = x;
     }
     public void setColor(Color x) {

@@ -3,54 +3,62 @@ package bodies;
 import java.awt.Color;
 
 public class SecondaryBody {
-    private int velocity;
-    private int mass;
-    private int radius;
-    private int x;
-    private int y;
+    private double velocity;
+    private double mass;
+    private double radius;
+    private double angle;
+    private double x;
+    private double y;
     private Color color;
 
-    public SecondaryBody(int velocity, int mass, int radius, int x, int y, Color color) {
+    public SecondaryBody(double velocity, double mass, double radius, double angle, double x, double y, Color color) {
         this.velocity = velocity;
         this.mass = mass;
         this.radius = radius;
+        this.angle = angle;
         this.x = x;
         this.y = y;
         this.color = color;
     }
 
-    public int getVelocity() {
+    public double getVelocity() {
         return this.velocity;
     }
-    public int getMass() {
+    public double getMass() {
         return this.mass;
     }
-    public int getRadius() {
+    public double getRadius() {
         return this.radius;
     }
-    public int getX() {
+    public double getAngle() {
+        return this.angle;
+    }
+    public double getX() {
         return this.x;
     }
-    public int getY() {
+    public double getY() {
         return this.y;
     }
     public Color getColor() {
         return this.color;
     }
 
-    public void setVelocity(int x) {
+    public void setVelocity(double x) {
         this.velocity = x;
     }
-    public void setMass(int x) {
+    public void setMass(double x) {
         this.mass = x;
     }
-    public void setRadius(int x) {
+    public void setRadius(double x) {
         this.radius = x;
     }
-    public void setX(int x) {
+    public void setAngle(double x) {
+        this.angle = x;
+    }
+    public void setX(double x) {
         this.x = x;
     }
-    public void setY(int x) {
+    public void setY(double x) {
         this.y = x;
     }
     public void setColor(Color x) {

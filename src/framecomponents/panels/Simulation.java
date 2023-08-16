@@ -24,18 +24,18 @@ public class Simulation extends JPanel {
         super.paint(g);
         for (int i = 0; i < mainBodyList.size(); i++) {
             g.setColor(mainBodyList.get(i).getColor());
-            int radius = mainBodyList.get(i).getRadius();
-            int x = mainBodyList.get(i).getX();
-            int y = mainBodyList.get(i).getY();
-            g.fillOval(x - (radius / 2), y - (radius / 2), radius, radius);
+            int radius = (int) mainBodyList.get(i).getRadius();
+            int x = (int) mainBodyList.get(i).getX();
+            int y = (int) mainBodyList.get(i).getY();
+            g.fillOval(x - radius, y - radius, radius * 2, radius * 2);
         }
 
         for (int i = 0; i < secondaryBodyList.size(); i++) {
             g.setColor(secondaryBodyList.get(i).getColor());
-            int radius = secondaryBodyList.get(i).getRadius();
-            int x = secondaryBodyList.get(i).getX();
-            int y = secondaryBodyList.get(i).getY();
-            g.fillOval(x - (radius / 2), y - (radius / 2), radius, radius);
+            int radius = (int) secondaryBodyList.get(i).getRadius();
+            int x = (int) secondaryBodyList.get(i).getX();
+            int y = (int) secondaryBodyList.get(i).getY();
+            g.fillOval(x - radius, y - radius, radius * 2, radius * 2);
         }
     }
 
@@ -54,12 +54,12 @@ public class Simulation extends JPanel {
             }
         }
 
-        public void calculation() {
-            for (int i = 0; i < secondaryBodyList.size(); i++) {
+        private void calculation() {
+            calculation: for (int i = 0; i < secondaryBodyList.size(); i++) {
                 double x = secondaryBodyList.get(i).getX();
                 double y = secondaryBodyList.get(i).getY();
-                double xvector = 5;
-                double yvector = 3;
+                double xvector = secondaryBodyList.get(i).getVelocity() * Math.cos(secondaryBodyList.get(i).getAngle() / 180 * Math.PI);
+                double yvector = secondaryBodyList.get(i).getVelocity() * Math.sin(-secondaryBodyList.get(i).getAngle() / 180 * Math.PI);
                 for (int a = 0; a < mainBodyList.size(); a++) {
                     double distanceX = (mainBodyList.get(a).getX() - secondaryBodyList.get(i).getX());
                     double distanceY = (mainBodyList.get(a).getY() - secondaryBodyList.get(i).getY());
@@ -67,6 +67,12 @@ public class Simulation extends JPanel {
 
                     xvector = xvector + distanceX * planetPull;
                     yvector = yvector + distanceY * planetPull;
+
+                    //check for collision
+                    if (Math.sqrt((distanceX * distanceX) + (distanceY * distanceY)) <= (secondaryBodyList.get(i).getRadius() + mainBodyList.get(a).getRadius())) {
+                        secondaryBodyList.remove(i);
+                        break calculation;
+                    }
 
                     System.out.println("CALLED");
                     System.out.println(xvector);
@@ -86,7 +92,6 @@ public class Simulation extends JPanel {
                  * shot_ypos[count] = (int) yshot;
                  */
             }
-
         }
     });
 }

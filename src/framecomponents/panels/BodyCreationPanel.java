@@ -55,11 +55,11 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
         this.add(new JLabel("Mass:"), gbc);
         gbc.gridy = 2;
         this.add(new JLabel("Radius:"), gbc);
-        gbc.gridy = 4;
-        this.add(new JLabel("Color:"), gbc);
         gbc.gridy = 5;
-        this.add(new JLabel("X:"), gbc);
+        this.add(new JLabel("Color:"), gbc);
         gbc.gridy = 6;
+        this.add(new JLabel("X:"), gbc);
+        gbc.gridy = 7;
         this.add(new JLabel("Y:"), gbc);
 
         // right side
@@ -71,11 +71,11 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
         this.add(MassTF, gbc);
         gbc.gridy = 2;
         this.add(RadiusTF, gbc);
-        gbc.gridy = 4;
-        this.add(ChooseButton, gbc);
         gbc.gridy = 5;
-        this.add(XTF, gbc);
+        this.add(ChooseButton, gbc);
         gbc.gridy = 6;
+        this.add(XTF, gbc);
+        gbc.gridy = 7;
         this.add(YTF, gbc);
 
         // bottom
@@ -88,20 +88,28 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
     JFormattedTextField MassTF = new JFormattedTextField(formatter);
     JFormattedTextField RadiusTF = new JFormattedTextField(formatter);
     JFormattedTextField VelocityTF = new JFormattedTextField(formatter);
+    JFormattedTextField AngleTF = new JFormattedTextField(formatter);
     JFormattedTextField XTF = new JFormattedTextField(formatter);
     JFormattedTextField YTF = new JFormattedTextField(formatter);
     JLabel VelocityLabel = new JLabel("Velocity");
+    JLabel AngleLabel = new JLabel("Angle");
 
     private void updateVelocityUI() {
         if (String.valueOf(comboBox.getSelectedItem()) == options[1]) {
             gbc.gridx = 0;
             gbc.gridy = 3;
             this.add(VelocityLabel, gbc);
+            gbc.gridy = 4;
+            this.add(AngleLabel, gbc);
             gbc.gridx = 1;
+            this.add(AngleTF, gbc);
+            gbc.gridy = 3;
             this.add(VelocityTF, gbc);
         } else {
             this.remove(VelocityLabel);
             this.remove(VelocityTF);
+            this.remove(AngleLabel);
+            this.remove(AngleTF);
         }
         this.repaint();
         this.revalidate();
@@ -128,7 +136,7 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
                 choose = false;
             } else {
                 gbc.gridx = 2;
-                gbc.gridy = 4;
+                gbc.gridy = 5;
                 gbc.gridwidth = 1;
                 this.add(ColorPicker, gbc);
                 choose = true;
@@ -141,7 +149,7 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
                 try {
                     if (MassTF.getText() != null && RadiusTF.getText() != null && VelocityTF.getText() != null && XTF.getText() != null && YTF.getText() != null) {
                         SecondaryBody body = new SecondaryBody(Integer.valueOf(VelocityTF.getText()), Integer.valueOf(MassTF.getText()),
-                                Integer.valueOf(RadiusTF.getText()), Integer.valueOf(XTF.getText()),
+                                Integer.valueOf(RadiusTF.getText()), Integer.valueOf(AngleTF.getText()), Integer.valueOf(XTF.getText()),
                                 Integer.valueOf(YTF.getText()), ColorPicker.getColor());
                         Simulation.secondaryBodyList.add(body);
                     }
