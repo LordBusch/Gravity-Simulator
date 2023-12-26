@@ -7,8 +7,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import bodies.MainBody;
-import bodies.SecondaryBody;
+import bodies.ObjectBody;
 
 public class Simulation extends JPanel {
     public Simulation() {
@@ -22,25 +21,17 @@ public class Simulation extends JPanel {
 
     public void paint(Graphics g) {
         super.paint(g);
-        for (int i = 0; i < mainBodyList.size(); i++) {
-            g.setColor(mainBodyList.get(i).getColor());
-            int radius = (int) mainBodyList.get(i).getRadius();
-            int x = (int) mainBodyList.get(i).getX();
-            int y = (int) mainBodyList.get(i).getY();
-            g.fillOval(x - radius, y - radius, radius * 2, radius * 2);
-        }
 
-        for (int i = 0; i < secondaryBodyList.size(); i++) {
-            g.setColor(secondaryBodyList.get(i).getColor());
-            int radius = (int) secondaryBodyList.get(i).getRadius();
-            int x = (int) secondaryBodyList.get(i).getX();
-            int y = (int) secondaryBodyList.get(i).getY();
+        for (int i = 0; i < ObjectBodyList.size(); i++) {
+            g.setColor(ObjectBodyList.get(i).getColor());
+            int radius = (int) ObjectBodyList.get(i).getRadius();
+            int x = (int) ObjectBodyList.get(i).getX();
+            int y = (int) ObjectBodyList.get(i).getY();
             g.fillOval(x - radius, y - radius, radius * 2, radius * 2);
         }
     }
 
-    public static List<MainBody> mainBodyList = new ArrayList<MainBody>();
-    public static List<SecondaryBody> secondaryBodyList = new ArrayList<SecondaryBody>();
+    public static List<ObjectBody> ObjectBodyList = new ArrayList<ObjectBody>();
 
     public Thread t1 = new Thread(new Runnable() {
         public void run() {
@@ -54,43 +45,68 @@ public class Simulation extends JPanel {
             }
         }
 
+        public void calculatePosition(double[] positionObject1, double[] positionObject2, double[] velocityObject1, double[] velocityObject2, double massObject1, double massObject2, int index1, int index2) {
+            // timestep
+            double deltaT = 10000;
+
+            // gravitational constant
+            double gravitationalConstant = 6.67e-11;
+
+            // position differences
+            double dx = positionObject2[0] - positionObject1[0];
+            double dy = positionObject2[1] - positionObject1[1];
+
+            // distance
+            double distance = Math.sqrt(dx * dx + dy * dy);
+
+            // gravitational force
+            double gravitationalForce = (gravitationalConstant * massObject1 * massObject2) / (distance * distance);
+
+            // gravitational force components
+            double fx = gravitationalForce * (dx / distance);
+            double fy = gravitationalForce * (dy / distance);
+
+            // acceleration 
+            double ax1 = fx / massObject1;
+            double ay1 = fy / massObject1;
+            //double ax2 = -fx / massObject2;
+            //double ay2 = -fy / massObject2;
+
+            // new velocities
+            double vx1_new = velocityObject1[0] + ax1 * deltaT;
+            double vy1_new = velocityObject1[1] + ay1 * deltaT;
+            //double vx2_new = velocityObject2[0] + ax2 * deltaT;
+            //double vy2_new = velocityObject2[1] + ay2 * deltaT;
+            ObjectBodyList.get(index1).setVelocityX(vx1_new);
+            ObjectBodyList.get(index1).setVelocityY(vy1_new);
+
+            // new positions
+            double x1_new = positionObject1[0] + vx1_new * deltaT;
+            double y1_new = positionObject1[1] + vy1_new * deltaT;
+            //double x2_new = positionObject2[0] + vx2_new * deltaT;
+            //double y2_new = positionObject2[1] + vy2_new * deltaT;
+            ObjectBodyList.get(index1).setX(x1_new);
+            ObjectBodyList.get(index1).setY(y1_new);
+            
+            System.out.println(x1_new + " / " + y1_new);
+        }
+
         private void calculation() {
-            calculation: for (int i = 0; i < secondaryBodyList.size(); i++) {
-                double x = secondaryBodyList.get(i).getX();
-                double y = secondaryBodyList.get(i).getY();
-                double xvector = secondaryBodyList.get(i).getVelocity() * Math.cos(secondaryBodyList.get(i).getAngle() / 180 * Math.PI);
-                double yvector = secondaryBodyList.get(i).getVelocity() * Math.sin(-secondaryBodyList.get(i).getAngle() / 180 * Math.PI);
-                for (int a = 0; a < mainBodyList.size(); a++) {
-                    double distanceX = (mainBodyList.get(a).getX() - secondaryBodyList.get(i).getX());
-                    double distanceY = (mainBodyList.get(a).getY() - secondaryBodyList.get(i).getY());
-                    double planetPull = 500 / ((distanceX * distanceX) + (distanceY * distanceY));
-
-                    xvector = xvector + distanceX * planetPull;
-                    yvector = yvector + distanceY * planetPull;
-
-                    //check for collision
-                    if (Math.sqrt((distanceX * distanceX) + (distanceY * distanceY)) <= (secondaryBodyList.get(i).getRadius() + mainBodyList.get(a).getRadius())) {
-                        secondaryBodyList.remove(i);
-                        break calculation;
+            for (int i = 0; i < ObjectBodyList.size(); i++) {
+                for (int a = 0; a < ObjectBodyList.size(); a++) {
+                    if (a != i) {
+                    calculatePosition(
+                        new double[]{ObjectBodyList.get(i).getX(), ObjectBodyList.get(i).getY()}, // position of object 1 (x, y)
+                        new double[]{ObjectBodyList.get(a).getX(), ObjectBodyList.get(a).getY()}, // position of object 2 (x, y)
+                        new double[]{ObjectBodyList.get(i).getVelocityX(), ObjectBodyList.get(i).getVelocityY()}, // velocity of object 1 (vx, vy)
+                        new double[]{ObjectBodyList.get(a).getVelocityX(), ObjectBodyList.get(a).getVelocityY()}, // velocity of object 2 (vx, vy)
+                        (double) ObjectBodyList.get(i).getMass(), // mass of object 1
+                        (double) ObjectBodyList.get(a).getMass(), // mass of object 2
+                        i,
+                        a
+                    );
                     }
-
-                    System.out.println("CALLED");
-                    System.out.println(xvector);
-                    System.out.println(yvector);
                 }
-                x = x + xvector;
-                y = y + yvector;
-                System.out.println(x);
-                System.out.println(y);
-                secondaryBodyList.get(i).setX((int) x);
-                secondaryBodyList.get(i).setY((int) y);
-                /*
-                 * // Calculate new position
-                 * xshot = xshot + xvector;
-                 * yshot = yshot + yvector;
-                 * shot_xpos[count] = (int) xshot;
-                 * shot_ypos[count] = (int) yshot;
-                 */
             }
         }
     });

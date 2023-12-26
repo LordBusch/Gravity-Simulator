@@ -9,12 +9,11 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.NumberFormatter;
 
-import bodies.MainBody;
-import bodies.SecondaryBody;
+import bodies.ObjectBody;
 
 public class BodyCreationPanel extends JPanel implements ActionListener {
 
-    String[] options = { "Main Body", "Secondary Body" };
+    String[] options = { "Object" };
     JComboBox comboBox = new JComboBox(options);
     JButton ChooseButton = new JButton("Choose");
     JButton CreateButton = new JButton("Create");
@@ -83,6 +82,8 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
         gbc.gridy = 8;
         gbc.gridwidth = 3;
         this.add(CreateButton, gbc);
+
+        updateVelocityUI();
     }
 
     JFormattedTextField MassTF = new JFormattedTextField(formatter);
@@ -95,7 +96,7 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
     JLabel AngleLabel = new JLabel("Angle");
 
     private void updateVelocityUI() {
-        if (String.valueOf(comboBox.getSelectedItem()) == options[1]) {
+        if (String.valueOf(comboBox.getSelectedItem()) == options[0]) {
             gbc.gridx = 0;
             gbc.gridy = 3;
             this.add(VelocityLabel, gbc);
@@ -144,32 +145,21 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
             this.revalidate();
         }
         if (e.getSource() == CreateButton) {
-            if (String.valueOf(comboBox.getSelectedItem()) == options[1]) {
+            if (String.valueOf(comboBox.getSelectedItem()) == options[0]) {
                 // if no necessary value is emtpy, create new secondaryBody
                 try {
                     if (MassTF.getText() != null && RadiusTF.getText() != null && VelocityTF.getText() != null && XTF.getText() != null && YTF.getText() != null) {
-                        SecondaryBody body = new SecondaryBody(Integer.valueOf(VelocityTF.getText()), Integer.valueOf(MassTF.getText()),
+                        ObjectBody body = new ObjectBody(Integer.valueOf(VelocityTF.getText()), Integer.valueOf(VelocityTF.getText()), Integer.valueOf(MassTF.getText()),
                                 Integer.valueOf(RadiusTF.getText()), Integer.valueOf(AngleTF.getText()), Integer.valueOf(XTF.getText()),
                                 Integer.valueOf(YTF.getText()), ColorPicker.getColor());
-                        Simulation.secondaryBodyList.add(body);
+                        Simulation.ObjectBodyList.add(body);
                     }
                 } catch (NumberFormatException e1) {
                     //error message
                     System.out.println("FAILED");
                 }
             } else {
-                // if no necessary value is emtpy, create new mainBody
-                try {
-                    if (MassTF.getText() != null && RadiusTF.getText() != null && XTF.getText() != null && YTF.getText() != null) {
-                        MainBody body = new MainBody(Integer.valueOf(MassTF.getText()),
-                                Integer.valueOf(RadiusTF.getText()), Integer.valueOf(XTF.getText()),
-                                Integer.valueOf(YTF.getText()), ColorPicker.getColor());
-                        Simulation.mainBodyList.add(body);
-                    }
-                } catch (NumberFormatException e1) {
-                    //error message
-                    System.out.println("FAILED");
-                }
+                // for other object types
             }
         }
     }
