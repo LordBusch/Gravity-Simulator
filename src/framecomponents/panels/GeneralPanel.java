@@ -60,7 +60,7 @@ public class GeneralPanel extends JPanel implements ActionListener {
             
         }
         if (e.getSource() == ResetButton) {
-            
+            Simulation.ObjectBodyList.clear();
         }
     }
 }
