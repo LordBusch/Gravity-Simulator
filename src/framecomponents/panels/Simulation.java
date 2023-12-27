@@ -19,9 +19,12 @@ public class Simulation extends JPanel  implements MouseMotionListener, MouseLis
 
     private void initialize() {
         this.setBackground(Color.black);
+        this.addMouseListener(this);
+        this.addMouseMotionListener(this);
         simulationThread.start();
     }
 
+    // offset dependent on the center
     private int offsetX = 0;
     private int offsetY = 0;
 
@@ -39,7 +42,7 @@ public class Simulation extends JPanel  implements MouseMotionListener, MouseLis
             int radius = (int) ObjectBodyList.get(i).getRadius();
             int x = (int) ObjectBodyList.get(i).getX();
             int y = (int) ObjectBodyList.get(i).getY();
-            g.fillOval(x - radius, y - radius, radius * 2, radius * 2);
+            g.fillOval((x + centerX) - radius, (y + centerY) - radius, radius * 2, radius * 2);
         }
     }
 
@@ -139,31 +142,36 @@ public class Simulation extends JPanel  implements MouseMotionListener, MouseLis
         }
     });
 
-    public void mouseClicked(MouseEvent e) {
-        throw new UnsupportedOperationException("Unimplemented method 'mouseClicked'");
-    }
+    // position of the mouse
+    private int initialX;
+    private int initialY;
+
+    public void mouseClicked(MouseEvent e) {}
 
     public void mousePressed(MouseEvent e) {
-        throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
+        initialX = e.getX();
+        initialY = e.getY();
     }
 
-    public void mouseReleased(MouseEvent e) {
-        throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
-    }
+    public void mouseReleased(MouseEvent e) {}
 
-    public void mouseEntered(MouseEvent e) {
-        throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
-    }
+    public void mouseEntered(MouseEvent e) {}
 
-    public void mouseExited(MouseEvent e) {
-        throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
-    }
+    public void mouseExited(MouseEvent e) {}
 
     public void mouseDragged(MouseEvent e) {
-        throw new UnsupportedOperationException("Unimplemented method 'mouseDragged'");
+        //System.out.println(initialX + " / " + initialY);
+        int dx = e.getX() - initialX;
+        int dy = e.getY() - initialY;
+
+        offsetX += dx;
+        offsetY += dy;
+
+        repaint();
+
+        initialX = e.getX();
+        initialY = e.getY();
     }
 
-    public void mouseMoved(MouseEvent e) {
-        throw new UnsupportedOperationException("Unimplemented method 'mouseMoved'");
-    }
+    public void mouseMoved(MouseEvent e) {}
 }
