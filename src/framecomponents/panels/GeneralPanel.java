@@ -1,4 +1,4 @@
-package framecomponents;
+package framecomponents.panels;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -50,7 +50,8 @@ public class GeneralPanel extends JPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == PauseButton) {
-            
+            if (Simulation.pause) Simulation.pause = false;
+            else Simulation.pause = true;
         }
         if (e.getSource() == LoadButton) {
             
@@ -59,7 +60,7 @@ public class GeneralPanel extends JPanel implements ActionListener {
             
         }
         if (e.getSource() == ResetButton) {
-            
+            Simulation.ObjectBodyList.clear();
         }
     }
 }

@@ -1,4 +1,4 @@
-package framecomponents;
+package framecomponents.panels;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -6,16 +6,15 @@ import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 
 import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.Border;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.NumberFormatter;
 
-import bodies.MainBody;
-import bodies.SecondaryBody;
+import bodies.ObjectBody;
 
 public class BodyCreationPanel extends JPanel implements ActionListener {
 
-    String[] options = { "Main Body", "Secondary Body" };
+    String[] options = { "Object" };
     JComboBox comboBox = new JComboBox(options);
     JButton ChooseButton = new JButton("Choose");
     JButton CreateButton = new JButton("Create");
@@ -56,11 +55,11 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
         this.add(new JLabel("Mass:"), gbc);
         gbc.gridy = 2;
         this.add(new JLabel("Radius:"), gbc);
-        gbc.gridy = 4;
-        this.add(new JLabel("Color:"), gbc);
         gbc.gridy = 5;
-        this.add(new JLabel("X:"), gbc);
+        this.add(new JLabel("Color:"), gbc);
         gbc.gridy = 6;
+        this.add(new JLabel("X:"), gbc);
+        gbc.gridy = 7;
         this.add(new JLabel("Y:"), gbc);
 
         // right side
@@ -72,11 +71,11 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
         this.add(MassTF, gbc);
         gbc.gridy = 2;
         this.add(RadiusTF, gbc);
-        gbc.gridy = 4;
-        this.add(ChooseButton, gbc);
         gbc.gridy = 5;
-        this.add(XTF, gbc);
+        this.add(ChooseButton, gbc);
         gbc.gridy = 6;
+        this.add(XTF, gbc);
+        gbc.gridy = 7;
         this.add(YTF, gbc);
 
         // bottom
@@ -84,25 +83,35 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
         gbc.gridy = 8;
         gbc.gridwidth = 3;
         this.add(CreateButton, gbc);
+
+        updateVelocityUI();
     }
 
     JFormattedTextField MassTF = new JFormattedTextField(formatter);
     JFormattedTextField RadiusTF = new JFormattedTextField(formatter);
     JFormattedTextField VelocityTF = new JFormattedTextField(formatter);
+    JFormattedTextField AngleTF = new JFormattedTextField(formatter);
     JFormattedTextField XTF = new JFormattedTextField(formatter);
     JFormattedTextField YTF = new JFormattedTextField(formatter);
     JLabel VelocityLabel = new JLabel("Velocity");
+    JLabel AngleLabel = new JLabel("Angle");
 
     private void updateVelocityUI() {
-        if (String.valueOf(comboBox.getSelectedItem()) == options[1]) {
+        if (String.valueOf(comboBox.getSelectedItem()) == options[0]) {
             gbc.gridx = 0;
             gbc.gridy = 3;
             this.add(VelocityLabel, gbc);
+            gbc.gridy = 4;
+            this.add(AngleLabel, gbc);
             gbc.gridx = 1;
+            this.add(AngleTF, gbc);
+            gbc.gridy = 3;
             this.add(VelocityTF, gbc);
         } else {
             this.remove(VelocityLabel);
             this.remove(VelocityTF);
+            this.remove(AngleLabel);
+            this.remove(AngleTF);
         }
         this.repaint();
         this.revalidate();
@@ -115,7 +124,7 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
 
     private void setUpFormatter() {
         formatter.setValueClass(Integer.class);
-        formatter.setMinimum(0);
+        formatter.setMinimum(Integer.MIN_VALUE);
         formatter.setMaximum(Integer.MAX_VALUE);
         formatter.setAllowsInvalid(false);
     }
@@ -129,7 +138,7 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
                 choose = false;
             } else {
                 gbc.gridx = 2;
-                gbc.gridy = 4;
+                gbc.gridy = 5;
                 gbc.gridwidth = 1;
                 this.add(ColorPicker, gbc);
                 choose = true;
@@ -137,30 +146,26 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
             this.revalidate();
         }
         if (e.getSource() == CreateButton) {
-            if (String.valueOf(comboBox.getSelectedItem()) == options[1]) {
+            if (String.valueOf(comboBox.getSelectedItem()) == options[0]) {
                 // if no necessary value is emtpy, create new secondaryBody
                 try {
-                    if (MassTF.getText() != null && RadiusTF.getText() != null && VelocityTF.getText() != null && XTF.getText() != null && YTF.getText() != null) {
-                        new SecondaryBody(Integer.valueOf(VelocityTF.getText()), Integer.valueOf(MassTF.getText()),
-                                Integer.valueOf(RadiusTF.getText()), Integer.valueOf(XTF.getText()),
-                                Integer.valueOf(YTF.getText()), ColorPicker.getColor());
-                    }
+                    // convert angles to radians
+                    double radianAngle = Math.toRadians(Integer.valueOf(AngleTF.getText()));
+
+                    // calculate velocities
+                    double velocityX = (Integer.valueOf(VelocityTF.getText()) / Simulation.deltaT) * Math.cos(radianAngle);
+                    double velocityY = (Integer.valueOf(VelocityTF.getText()) / Simulation.deltaT) * Math.sin(radianAngle);
+                    
+                    ObjectBody body = new ObjectBody(velocityX, velocityY, Integer.valueOf(MassTF.getText()),
+                            Integer.valueOf(RadiusTF.getText()), Integer.valueOf(XTF.getText()),
+                            Integer.valueOf(YTF.getText()), ColorPicker.getColor());
+                    Simulation.ObjectBodyList.add(body);
                 } catch (NumberFormatException e1) {
                     //error message
                     System.out.println("FAILED");
                 }
             } else {
-                // if no necessary value is emtpy, create new mainBody
-                try {
-                    if (MassTF.getText() != null && RadiusTF.getText() != null && XTF.getText() != null && YTF.getText() != null) {
-                        new MainBody(Integer.valueOf(MassTF.getText()),
-                                Integer.valueOf(RadiusTF.getText()), Integer.valueOf(XTF.getText()),
-                                Integer.valueOf(YTF.getText()), ColorPicker.getColor());
-                    }
-                } catch (NumberFormatException e1) {
-                    //error message
-                    System.out.println("FAILED");
-                }
+                // for other object types
             }
         }
     }
