@@ -7,17 +7,15 @@ public class ObjectBody {
     private double velocityY;
     private double mass;
     private double radius;
-    private double angle;
     private double x;
     private double y;
     private Color color;
 
-    public ObjectBody(double velocityX, double velocityY, double mass, double radius, double angle, double x, double y, Color color) {
+    public ObjectBody(double velocityX, double velocityY, double mass, double radius, double x, double y, Color color) {
         this.velocityX = velocityX;
         this.velocityY = velocityY;
         this.mass = mass;
         this.radius = radius;
-        this.angle = angle;
         this.x = x;
         this.y = y;
         this.color = color;
@@ -34,9 +32,6 @@ public class ObjectBody {
     }
     public double getRadius() {
         return this.radius;
-    }
-    public double getAngle() {
-        return this.angle;
     }
     public double getX() {
         return this.x;
@@ -59,9 +54,6 @@ public class ObjectBody {
     }
     public void setRadius(double x) {
         this.radius = x;
-    }
-    public void setAngle(double x) {
-        this.angle = x;
     }
     public void setX(double x) {
         this.x = x;

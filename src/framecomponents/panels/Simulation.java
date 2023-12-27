@@ -33,6 +33,8 @@ public class Simulation extends JPanel {
 
     public static List<ObjectBody> ObjectBodyList = new ArrayList<ObjectBody>();
     public static boolean pause = false;
+    // timestep in seconds
+    public static double deltaT = 10000;
 
     public Thread simulationThread = new Thread(new Runnable() {
         public void run() {
@@ -49,9 +51,6 @@ public class Simulation extends JPanel {
         }
 
         public void calculatePosition(double[] positionObject1, double[] positionObject2, double[] velocityObject1, double[] velocityObject2, double massObject1, double massObject2, int index1, int index2) {
-            // timestep
-            double deltaT = 10000;
-
             // gravitational constant
             double gravitationalConstant = 6.67e-11;
 
@@ -95,19 +94,33 @@ public class Simulation extends JPanel {
         }
 
         private void calculation() {
-            for (int i = 0; i < ObjectBodyList.size(); i++) {
-                for (int a = 0; a < ObjectBodyList.size(); a++) {
-                    if (a != i) {
-                    calculatePosition(
-                        new double[]{ObjectBodyList.get(i).getX(), ObjectBodyList.get(i).getY()}, // position of object 1 (x, y)
-                        new double[]{ObjectBodyList.get(a).getX(), ObjectBodyList.get(a).getY()}, // position of object 2 (x, y)
-                        new double[]{ObjectBodyList.get(i).getVelocityX(), ObjectBodyList.get(i).getVelocityY()}, // velocity of object 1 (vx, vy)
-                        new double[]{ObjectBodyList.get(a).getVelocityX(), ObjectBodyList.get(a).getVelocityY()}, // velocity of object 2 (vx, vy)
-                        (double) ObjectBodyList.get(i).getMass(), // mass of object 1
-                        (double) ObjectBodyList.get(a).getMass(), // mass of object 2
-                        i,
-                        a
-                    );
+            if (ObjectBodyList.size() == 1) {
+                calculatePosition(
+                    new double[]{ObjectBodyList.get(0).getX(), ObjectBodyList.get(0).getY()}, // position of object 1 (x, y)
+                    new double[]{0, 0}, // position of object 2 (x, y)
+                    new double[]{ObjectBodyList.get(0).getVelocityX(), ObjectBodyList.get(0).getVelocityY()}, // velocity of object 1 (vx, vy)
+                    new double[]{0, 0}, // velocity of object 2 (vx, vy)
+                    (double) ObjectBodyList.get(0).getMass(), // mass of object 1
+                    (double) 0, // mass of object 2
+                    0,
+                    0
+                );
+            }
+            else {
+                for (int i = 0; i < ObjectBodyList.size(); i++) {
+                    for (int a = 0; a < ObjectBodyList.size(); a++) {
+                        if (a != i) {
+                            calculatePosition(
+                                new double[]{ObjectBodyList.get(i).getX(), ObjectBodyList.get(i).getY()}, // position of object 1 (x, y)
+                                new double[]{ObjectBodyList.get(a).getX(), ObjectBodyList.get(a).getY()}, // position of object 2 (x, y)
+                                new double[]{ObjectBodyList.get(i).getVelocityX(), ObjectBodyList.get(i).getVelocityY()}, // velocity of object 1 (vx, vy)
+                                new double[]{ObjectBodyList.get(a).getVelocityX(), ObjectBodyList.get(a).getVelocityY()}, // velocity of object 2 (vx, vy)
+                                (double) ObjectBodyList.get(i).getMass(), // mass of object 1
+                                (double) ObjectBodyList.get(a).getMass(), // mass of object 2
+                                i,
+                                a
+                            );
+                        }
                     }
                 }
             }

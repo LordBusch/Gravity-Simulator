@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 
 import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.Border;
 import javax.swing.text.NumberFormatter;
 
@@ -148,12 +149,17 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
             if (String.valueOf(comboBox.getSelectedItem()) == options[0]) {
                 // if no necessary value is emtpy, create new secondaryBody
                 try {
-                    if (MassTF.getText() != null && RadiusTF.getText() != null && VelocityTF.getText() != null && XTF.getText() != null && YTF.getText() != null) {
-                        ObjectBody body = new ObjectBody(Integer.valueOf(VelocityTF.getText()), Integer.valueOf(VelocityTF.getText()), Integer.valueOf(MassTF.getText()),
-                                Integer.valueOf(RadiusTF.getText()), Integer.valueOf(AngleTF.getText()), Integer.valueOf(XTF.getText()),
-                                Integer.valueOf(YTF.getText()), ColorPicker.getColor());
-                        Simulation.ObjectBodyList.add(body);
-                    }
+                    // convert angles to radians
+                    double radianAngle = Math.toRadians(Integer.valueOf(AngleTF.getText()));
+
+                    // calculate velocities
+                    double velocityX = (Integer.valueOf(VelocityTF.getText()) / Simulation.deltaT) * Math.cos(radianAngle);
+                    double velocityY = (Integer.valueOf(VelocityTF.getText()) / Simulation.deltaT) * Math.sin(radianAngle);
+                    
+                    ObjectBody body = new ObjectBody(velocityX, velocityY, Integer.valueOf(MassTF.getText()),
+                            Integer.valueOf(RadiusTF.getText()), Integer.valueOf(XTF.getText()),
+                            Integer.valueOf(YTF.getText()), ColorPicker.getColor());
+                    Simulation.ObjectBodyList.add(body);
                 } catch (NumberFormatException e1) {
                     //error message
                     System.out.println("FAILED");
