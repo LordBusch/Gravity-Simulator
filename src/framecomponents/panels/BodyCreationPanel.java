@@ -124,7 +124,7 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
 
     private void setUpFormatter() {
         formatter.setValueClass(Integer.class);
-        formatter.setMinimum(0);
+        formatter.setMinimum(Integer.MIN_VALUE);
         formatter.setMaximum(Integer.MAX_VALUE);
         formatter.setAllowsInvalid(false);
     }
