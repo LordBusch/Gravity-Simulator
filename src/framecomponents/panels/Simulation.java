@@ -16,7 +16,7 @@ public class Simulation extends JPanel {
 
     private void initialize() {
         this.setBackground(Color.black);
-        t1.start();
+        simulationThread.start();
     }
 
     public void paint(Graphics g) {
@@ -32,12 +32,15 @@ public class Simulation extends JPanel {
     }
 
     public static List<ObjectBody> ObjectBodyList = new ArrayList<ObjectBody>();
+    public static boolean pause = false;
 
-    public Thread t1 = new Thread(new Runnable() {
+    public Thread simulationThread = new Thread(new Runnable() {
         public void run() {
             while (true) {
-                calculation();
-                repaint();
+                if (pause == false) {
+                    calculation();
+                    repaint();
+                }
                 try {
                     Thread.sleep(16);
                 } catch (InterruptedException e) {
