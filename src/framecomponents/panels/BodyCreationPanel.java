@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 
 import javax.swing.*;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.Border;
 import javax.swing.text.NumberFormatter;
 
@@ -147,7 +146,7 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
         }
         if (e.getSource() == CreateButton) {
             if (String.valueOf(comboBox.getSelectedItem()) == options[0]) {
-                // if no necessary value is emtpy, create new secondaryBody
+                // if no necessary value is emtpy, create new ObjectBody
                 try {
                     // convert angles to radians
                     double radianAngle = Math.toRadians(Integer.valueOf(AngleTF.getText()));

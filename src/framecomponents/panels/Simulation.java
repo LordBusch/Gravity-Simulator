@@ -2,6 +2,9 @@ package framecomponents.panels;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +12,7 @@ import javax.swing.JPanel;
 
 import bodies.ObjectBody;
 
-public class Simulation extends JPanel {
+public class Simulation extends JPanel  implements MouseMotionListener, MouseListener {
     public Simulation() {
         initialize();
     }
@@ -19,8 +22,17 @@ public class Simulation extends JPanel {
         simulationThread.start();
     }
 
+    private int offsetX = 0;
+    private int offsetY = 0;
+
     public void paint(Graphics g) {
         super.paint(g);
+
+        int centerX = getWidth() / 2 + offsetX;
+        int centerY = getHeight() / 2 + offsetY;
+
+        g.drawLine(0, centerY, getWidth(), centerY);
+        g.drawLine(centerX, 0, centerX, getHeight());
 
         for (int i = 0; i < ObjectBodyList.size(); i++) {
             g.setColor(ObjectBodyList.get(i).getColor());
@@ -126,4 +138,32 @@ public class Simulation extends JPanel {
             }
         }
     });
+
+    public void mouseClicked(MouseEvent e) {
+        throw new UnsupportedOperationException("Unimplemented method 'mouseClicked'");
+    }
+
+    public void mousePressed(MouseEvent e) {
+        throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
+    }
+
+    public void mouseReleased(MouseEvent e) {
+        throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
+    }
+
+    public void mouseEntered(MouseEvent e) {
+        throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
+    }
+
+    public void mouseExited(MouseEvent e) {
+        throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
+    }
+
+    public void mouseDragged(MouseEvent e) {
+        throw new UnsupportedOperationException("Unimplemented method 'mouseDragged'");
+    }
+
+    public void mouseMoved(MouseEvent e) {
+        throw new UnsupportedOperationException("Unimplemented method 'mouseMoved'");
+    }
 }
