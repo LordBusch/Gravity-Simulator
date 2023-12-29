@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +14,7 @@ import javax.swing.JPanel;
 
 import bodies.ObjectBody;
 
-public class Simulation extends JPanel  implements MouseMotionListener, MouseListener {
+public class Simulation extends JPanel  implements MouseMotionListener, MouseListener, MouseWheelListener {
     public Simulation() {
         initialize();
     }
@@ -21,9 +23,11 @@ public class Simulation extends JPanel  implements MouseMotionListener, MouseLis
         this.setBackground(Color.black);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
+        this.addMouseWheelListener(this);
         simulationThread.start();
     }
 
+    private double zoomFactor = 1.0;
     // offset dependent on the center
     private int offsetX = 0;
     private int offsetY = 0;
@@ -31,8 +35,8 @@ public class Simulation extends JPanel  implements MouseMotionListener, MouseLis
     public void paint(Graphics g) {
         super.paint(g);
 
-        int centerX = getWidth() / 2 + offsetX;
-        int centerY = getHeight() / 2 + offsetY;
+        int centerX = (int) ((getWidth() / 2 + offsetX) * zoomFactor);
+        int centerY = (int) ((getHeight() / 2 + offsetY) * zoomFactor);
 
         g.drawLine(0, centerY, getWidth(), centerY);
         g.drawLine(centerX, 0, centerX, getHeight());
@@ -40,9 +44,10 @@ public class Simulation extends JPanel  implements MouseMotionListener, MouseLis
         for (int i = 0; i < ObjectBodyList.size(); i++) {
             g.setColor(ObjectBodyList.get(i).getColor());
             int radius = (int) ObjectBodyList.get(i).getRadius();
-            int x = (int) ObjectBodyList.get(i).getX();
-            int y = (int) ObjectBodyList.get(i).getY();
-            g.fillOval((x + centerX) - radius, (y + centerY) - radius, radius * 2, radius * 2);
+            int scaledRadius = (int) (radius * zoomFactor);
+            int x = (int) (ObjectBodyList.get(i).getX() * zoomFactor);
+            int y = (int) (ObjectBodyList.get(i).getY() * zoomFactor);
+            g.fillOval((x + centerX) - scaledRadius, (y + centerY) - scaledRadius, scaledRadius * 2, scaledRadius * 2);
         }
     }
 
@@ -160,7 +165,6 @@ public class Simulation extends JPanel  implements MouseMotionListener, MouseLis
     public void mouseExited(MouseEvent e) {}
 
     public void mouseDragged(MouseEvent e) {
-        //System.out.println(initialX + " / " + initialY);
         int dx = e.getX() - initialX;
         int dy = e.getY() - initialY;
 
@@ -174,4 +178,17 @@ public class Simulation extends JPanel  implements MouseMotionListener, MouseLis
     }
 
     public void mouseMoved(MouseEvent e) {}
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        int notches = e.getWheelRotation();
+        if (notches < 0) {
+            // Zoom in
+            zoomFactor *= 1.1;
+        } else {
+            // Zoom out
+            zoomFactor /= 1.1;
+        }
+        repaint();
+    }
 }
