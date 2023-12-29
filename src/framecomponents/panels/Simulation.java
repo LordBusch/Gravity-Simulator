@@ -29,8 +29,8 @@ public class Simulation extends JPanel  implements MouseMotionListener, MouseLis
 
     private double zoomFactor = 1.0;
     // offset dependent on the center
-    private int offsetX = 0;
-    private int offsetY = 0;
+    private double offsetX = 0;
+    private double offsetY = 0;
 
     public void paint(Graphics g) {
         super.paint(g);
@@ -168,8 +168,8 @@ public class Simulation extends JPanel  implements MouseMotionListener, MouseLis
         int dx = e.getX() - initialX;
         int dy = e.getY() - initialY;
 
-        offsetX += dx;
-        offsetY += dy;
+        offsetX += dx / zoomFactor;
+        offsetY += dy / zoomFactor;
 
         repaint();
 
