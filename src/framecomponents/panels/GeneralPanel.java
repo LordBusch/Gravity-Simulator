@@ -50,8 +50,14 @@ public class GeneralPanel extends JPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == PauseButton) {
-            if (Simulation.pause) Simulation.pause = false;
-            else Simulation.pause = true;
+            if (Simulation.pause) {
+                Simulation.pause = false;
+                PauseButton.setText("Pause");
+            }
+            else {
+                Simulation.pause = true;
+                PauseButton.setText("Resume");
+            }
         }
         if (e.getSource() == LoadButton) {
             

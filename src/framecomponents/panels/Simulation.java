@@ -59,9 +59,9 @@ public class Simulation extends JPanel  implements MouseMotionListener, MouseLis
     public Thread simulationThread = new Thread(new Runnable() {
         public void run() {
             while (true) {
+                repaint();
                 if (pause == false) {
                     calculation();
-                    repaint();
                 }
                 try {
                     Thread.sleep(16);
