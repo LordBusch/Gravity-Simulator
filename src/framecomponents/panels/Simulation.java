@@ -2,6 +2,11 @@ package framecomponents.panels;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,25 +14,40 @@ import javax.swing.JPanel;
 
 import bodies.ObjectBody;
 
-public class Simulation extends JPanel {
+public class Simulation extends JPanel  implements MouseMotionListener, MouseListener, MouseWheelListener {
     public Simulation() {
         initialize();
     }
 
     private void initialize() {
         this.setBackground(Color.black);
+        this.addMouseListener(this);
+        this.addMouseMotionListener(this);
+        this.addMouseWheelListener(this);
         simulationThread.start();
     }
+
+    private double zoomFactor = 1.0;
+    // offset dependent on the center
+    private double offsetX = 0;
+    private double offsetY = 0;
 
     public void paint(Graphics g) {
         super.paint(g);
 
+        int centerX = (int) ((getWidth() / 2 + offsetX) * zoomFactor);
+        int centerY = (int) ((getHeight() / 2 + offsetY) * zoomFactor);
+
+        g.drawLine(0, centerY, getWidth(), centerY);
+        g.drawLine(centerX, 0, centerX, getHeight());
+
         for (int i = 0; i < ObjectBodyList.size(); i++) {
             g.setColor(ObjectBodyList.get(i).getColor());
             int radius = (int) ObjectBodyList.get(i).getRadius();
-            int x = (int) ObjectBodyList.get(i).getX();
-            int y = (int) ObjectBodyList.get(i).getY();
-            g.fillOval(x - radius, y - radius, radius * 2, radius * 2);
+            int scaledRadius = (int) (radius * zoomFactor);
+            int x = (int) (ObjectBodyList.get(i).getX() * zoomFactor);
+            int y = (int) (ObjectBodyList.get(i).getY() * zoomFactor);
+            g.fillOval((x + centerX) - scaledRadius, (y + centerY) - scaledRadius, scaledRadius * 2, scaledRadius * 2);
         }
     }
 
@@ -39,9 +59,9 @@ public class Simulation extends JPanel {
     public Thread simulationThread = new Thread(new Runnable() {
         public void run() {
             while (true) {
+                repaint();
                 if (pause == false) {
                     calculation();
-                    repaint();
                 }
                 try {
                     Thread.sleep(16);
@@ -93,17 +113,21 @@ public class Simulation extends JPanel {
             System.out.println(x1_new + " / " + y1_new);
         }
 
+        public void calculateSingePosition(double[] positionObject, double[] velocityObject, double massObject) {
+            // new positions
+            double x1_new = positionObject[0] + velocityObject[0] * deltaT;
+            double y1_new = positionObject[1] + velocityObject[1] * deltaT;
+
+            ObjectBodyList.get(0).setX(x1_new);
+            ObjectBodyList.get(0).setY(y1_new);
+        }
+
         private void calculation() {
             if (ObjectBodyList.size() == 1) {
-                calculatePosition(
-                    new double[]{ObjectBodyList.get(0).getX(), ObjectBodyList.get(0).getY()}, // position of object 1 (x, y)
-                    new double[]{0, 0}, // position of object 2 (x, y)
-                    new double[]{ObjectBodyList.get(0).getVelocityX(), ObjectBodyList.get(0).getVelocityY()}, // velocity of object 1 (vx, vy)
-                    new double[]{0, 0}, // velocity of object 2 (vx, vy)
-                    (double) ObjectBodyList.get(0).getMass(), // mass of object 1
-                    (double) 0, // mass of object 2
-                    0,
-                    0
+                calculateSingePosition(
+                    new double[]{ObjectBodyList.get(0).getX(), ObjectBodyList.get(0).getY()},
+                    new double[]{ObjectBodyList.get(0).getVelocityX(), ObjectBodyList.get(0).getVelocityY()},
+                    (double) ObjectBodyList.get(0).getMass()
                 );
             }
             else {
@@ -126,4 +150,49 @@ public class Simulation extends JPanel {
             }
         }
     });
+
+    // position of the mouse
+    private int initialX;
+    private int initialY;
+
+    public void mouseClicked(MouseEvent e) {}
+
+    public void mousePressed(MouseEvent e) {
+        initialX = e.getX();
+        initialY = e.getY();
+    }
+
+    public void mouseReleased(MouseEvent e) {}
+
+    public void mouseEntered(MouseEvent e) {}
+
+    public void mouseExited(MouseEvent e) {}
+
+    public void mouseDragged(MouseEvent e) {
+        int dx = e.getX() - initialX;
+        int dy = e.getY() - initialY;
+
+        offsetX += dx / zoomFactor;
+        offsetY += dy / zoomFactor;
+
+        repaint();
+
+        initialX = e.getX();
+        initialY = e.getY();
+    }
+
+    public void mouseMoved(MouseEvent e) {}
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        int notches = e.getWheelRotation();
+        if (notches < 0) {
+            // Zoom in
+            zoomFactor *= 1.1;
+        } else {
+            // Zoom out
+            zoomFactor /= 1.1;
+        }
+        repaint();
+    }
 }
