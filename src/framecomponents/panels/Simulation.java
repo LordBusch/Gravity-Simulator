@@ -113,17 +113,21 @@ public class Simulation extends JPanel  implements MouseMotionListener, MouseLis
             System.out.println(x1_new + " / " + y1_new);
         }
 
+        public void calculateSingePosition(double[] positionObject, double[] velocityObject, double massObject) {
+            // new positions
+            double x1_new = positionObject[0] + velocityObject[0] * deltaT;
+            double y1_new = positionObject[1] + velocityObject[1] * deltaT;
+
+            ObjectBodyList.get(0).setX(x1_new);
+            ObjectBodyList.get(0).setY(y1_new);
+        }
+
         private void calculation() {
             if (ObjectBodyList.size() == 1) {
-                calculatePosition(
-                    new double[]{ObjectBodyList.get(0).getX(), ObjectBodyList.get(0).getY()}, // position of object 1 (x, y)
-                    new double[]{0, 0}, // position of object 2 (x, y)
-                    new double[]{ObjectBodyList.get(0).getVelocityX(), ObjectBodyList.get(0).getVelocityY()}, // velocity of object 1 (vx, vy)
-                    new double[]{0, 0}, // velocity of object 2 (vx, vy)
-                    (double) ObjectBodyList.get(0).getMass(), // mass of object 1
-                    (double) 0, // mass of object 2
-                    0,
-                    0
+                calculateSingePosition(
+                    new double[]{ObjectBodyList.get(0).getX(), ObjectBodyList.get(0).getY()},
+                    new double[]{ObjectBodyList.get(0).getVelocityX(), ObjectBodyList.get(0).getVelocityY()},
+                    (double) ObjectBodyList.get(0).getMass()
                 );
             }
             else {
