@@ -3,9 +3,10 @@ package framecomponents.panels;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Hashtable;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class GeneralPanel extends JPanel implements ActionListener {
 
@@ -15,6 +16,7 @@ public class GeneralPanel extends JPanel implements ActionListener {
     JButton ResetButton = new JButton("Reset");
     JCheckBox TraceCheckBox = new JCheckBox("Show trace");
     JSlider TraceSlider = new JSlider();
+    JSlider SpeedSlider = new JSlider();
 
     GridBagLayout layout = new GridBagLayout();
     GridBagConstraints gbc = new GridBagConstraints();
@@ -42,6 +44,8 @@ public class GeneralPanel extends JPanel implements ActionListener {
         gbc.gridy = 1;
         gbc.gridwidth = 3;
         this.add(PauseButton, gbc);
+        gbc.gridy = 2;
+        this.add(SpeedSlider, gbc);
         /*
         gbc.gridy = 2;
         this.add(TraceCheckBox, gbc);
@@ -79,6 +83,22 @@ public class GeneralPanel extends JPanel implements ActionListener {
 		TraceSlider.setPaintLabels(true);
         TraceSlider.setBackground(getBackground());
         */
+
+        SpeedSlider.setMinimum(0);
+        SpeedSlider.setMaximum(4);
+		SpeedSlider.setMajorTickSpacing(1);
+		SpeedSlider.setPaintTicks(true);
+		SpeedSlider.setPaintLabels(true);
+        SpeedSlider.setBackground(getBackground());
+        SpeedSlider.setSnapToTicks(true);
+        SpeedSlider.setValue(1);
+        SpeedSlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent event) {
+                int value = SpeedSlider.getValue();
+                double result = Math.pow(4, value - 1);
+                Simulation.refreshDeltaT(result);
+            }
+        });
     }
 
     public void actionPerformed(ActionEvent e) {

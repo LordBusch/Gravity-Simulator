@@ -32,6 +32,10 @@ public class Simulation extends JPanel  implements MouseMotionListener, MouseLis
     private double offsetX = 0;
     private double offsetY = 0;
 
+    public static void refreshDeltaT(double value) {
+        deltaT = 10000 * value;
+    }
+
     public void paint(Graphics g) {
         super.paint(g);
 
@@ -110,7 +114,7 @@ public class Simulation extends JPanel  implements MouseMotionListener, MouseLis
             ObjectBodyList.get(index1).setX(x1_new);
             ObjectBodyList.get(index1).setY(y1_new);
             
-            System.out.println(x1_new + " / " + y1_new);
+            //System.out.println(x1_new + " / " + y1_new);
         }
 
         public void calculateSingePosition(double[] positionObject, double[] velocityObject, double massObject) {
