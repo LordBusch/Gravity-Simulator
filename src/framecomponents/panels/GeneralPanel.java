@@ -3,6 +3,7 @@ package framecomponents.panels;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Hashtable;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -17,6 +18,7 @@ public class GeneralPanel extends JPanel implements ActionListener {
     JCheckBox TraceCheckBox = new JCheckBox("Show trace");
     JSlider TraceSlider = new JSlider();
     JSlider SpeedSlider = new JSlider();
+    JLabel SpeedLabel = new JLabel("Simulation Speed");
 
     GridBagLayout layout = new GridBagLayout();
     GridBagConstraints gbc = new GridBagConstraints();
@@ -45,6 +47,8 @@ public class GeneralPanel extends JPanel implements ActionListener {
         gbc.gridwidth = 3;
         this.add(PauseButton, gbc);
         gbc.gridy = 2;
+        this.add(SpeedLabel, gbc);
+        gbc.gridy = 3;
         this.add(SpeedSlider, gbc);
         /*
         gbc.gridy = 2;
@@ -83,6 +87,14 @@ public class GeneralPanel extends JPanel implements ActionListener {
 		TraceSlider.setPaintLabels(true);
         TraceSlider.setBackground(getBackground());
         */
+
+        Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
+        labelTable.put(0, new JLabel("0") );
+        labelTable.put(1, new JLabel("1") );
+        labelTable.put(2, new JLabel("4") );
+        labelTable.put(3, new JLabel("16") );
+        labelTable.put(4, new JLabel("64") );
+        SpeedSlider.setLabelTable(labelTable);
 
         SpeedSlider.setMinimum(0);
         SpeedSlider.setMaximum(4);
