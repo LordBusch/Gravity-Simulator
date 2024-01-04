@@ -152,8 +152,8 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
                     double radianAngle = Math.toRadians(Integer.valueOf(AngleTF.getText()));
 
                     // calculate velocities
-                    double velocityX = (Integer.valueOf(VelocityTF.getText()) / Simulation.deltaT) * Math.cos(radianAngle);
-                    double velocityY = (Integer.valueOf(VelocityTF.getText()) / Simulation.deltaT) * Math.sin(radianAngle);
+                    double velocityX = (Integer.valueOf(VelocityTF.getText()) / 10000.0) * Math.cos(radianAngle); // 10000.0 is start value of deltaT
+                    double velocityY = (Integer.valueOf(VelocityTF.getText()) / 10000.0) * Math.sin(radianAngle);
                     
                     ObjectBody body = new ObjectBody(velocityX, velocityY, Integer.valueOf(MassTF.getText()),
                             Integer.valueOf(RadiusTF.getText()), Integer.valueOf(XTF.getText()),

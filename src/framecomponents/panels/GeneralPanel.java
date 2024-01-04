@@ -89,7 +89,7 @@ public class GeneralPanel extends JPanel implements ActionListener {
         */
 
         Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
-        labelTable.put(0, new JLabel("0") );
+        labelTable.put(0, new JLabel("0.25") );
         labelTable.put(1, new JLabel("1") );
         labelTable.put(2, new JLabel("4") );
         labelTable.put(3, new JLabel("16") );
