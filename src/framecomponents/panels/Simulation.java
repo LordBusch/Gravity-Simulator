@@ -31,6 +31,9 @@ public class Simulation extends JPanel  implements MouseMotionListener, MouseLis
     // offset dependent on the center
     private double offsetX = 0;
     private double offsetY = 0;
+    // offset from initialX/Y
+    private int markingOffsetX = 0;
+    private int markingOffsetY = 0;
 
     public static void refreshDeltaT(double value) {
         deltaT = 10000 * value;
@@ -42,9 +45,11 @@ public class Simulation extends JPanel  implements MouseMotionListener, MouseLis
         int centerX = (int) ((getWidth() / 2 + offsetX) * zoomFactor);
         int centerY = (int) ((getHeight() / 2 + offsetY) * zoomFactor);
 
+        // draw coordinate system
         g.drawLine(0, centerY, getWidth(), centerY);
         g.drawLine(centerX, 0, centerX, getHeight());
 
+        // draw objects
         for (int i = 0; i < ObjectBodyList.size(); i++) {
             g.setColor(ObjectBodyList.get(i).getColor());
             int radius = (int) ObjectBodyList.get(i).getRadius();
@@ -52,6 +57,20 @@ public class Simulation extends JPanel  implements MouseMotionListener, MouseLis
             int x = (int) (ObjectBodyList.get(i).getX() * zoomFactor);
             int y = (int) (ObjectBodyList.get(i).getY() * zoomFactor);
             g.fillOval((x + centerX) - scaledRadius, (y + centerY) - scaledRadius, scaledRadius * 2, scaledRadius * 2);
+        }
+
+        // draw marking
+        if (markingOffsetX < 0) { // left + bottom
+            g.drawRect(initialX + markingOffsetX, initialY, -markingOffsetX, markingOffsetY);
+        }
+        if (markingOffsetY < 0) { // right + top
+            g.drawRect(initialX, initialY + markingOffsetY, markingOffsetX, -markingOffsetY);
+        }
+        if (markingOffsetX < 0 && markingOffsetY < 0) { // left + top
+            g.drawRect(initialX + markingOffsetX, initialY + markingOffsetY, -markingOffsetX, -markingOffsetY);
+        }
+        if (markingOffsetX > 0 && markingOffsetY > 0) { // right + bottom
+            g.drawRect(initialX, initialY, markingOffsetX, markingOffsetY);
         }
     }
 
@@ -158,31 +177,55 @@ public class Simulation extends JPanel  implements MouseMotionListener, MouseLis
     // position of the mouse
     private int initialX;
     private int initialY;
+    // mouse button
+    private int button;
 
     public void mouseClicked(MouseEvent e) {}
 
     public void mousePressed(MouseEvent e) {
         initialX = e.getX();
         initialY = e.getY();
+
+        if(e.getButton() == MouseEvent.BUTTON3) {
+            button = 3;
+        }
+        if(e.getButton() == MouseEvent.BUTTON1) {
+            button = 1;
+        }
     }
 
-    public void mouseReleased(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {
+        // delete marking
+        markingOffsetX = 0;
+        markingOffsetY = 0;
+    }
 
     public void mouseEntered(MouseEvent e) {}
 
     public void mouseExited(MouseEvent e) {}
 
     public void mouseDragged(MouseEvent e) {
-        int dx = e.getX() - initialX;
-        int dy = e.getY() - initialY;
+        // left click / map moving
+        if(button == 1) {
+            int dx = e.getX() - initialX;
+            int dy = e.getY() - initialY;
+    
+            offsetX += dx / zoomFactor;
+            offsetY += dy / zoomFactor;
+            
+            initialX = e.getX();
+            initialY = e.getY();
+        }
+        // right click / marking
+        if(button == 3) {
+            int x = e.getX();
+            int y = e.getY();
 
-        offsetX += dx / zoomFactor;
-        offsetY += dy / zoomFactor;
+            markingOffsetX = x - initialX;
+            markingOffsetY = y - initialY;
+        }
 
         repaint();
-
-        initialX = e.getX();
-        initialY = e.getY();
     }
 
     public void mouseMoved(MouseEvent e) {}
