@@ -155,10 +155,18 @@ public class BodyCreationPanel extends JPanel implements ActionListener {
                     double velocityX = (Integer.valueOf(VelocityTF.getText()) / 10000.0) * Math.cos(radianAngle); // 10000.0 is start value of deltaT
                     double velocityY = (Integer.valueOf(VelocityTF.getText()) / 10000.0) * Math.sin(radianAngle);
                     
-                    ObjectBody body = new ObjectBody(velocityX, velocityY, Integer.valueOf(MassTF.getText()),
-                            Integer.valueOf(RadiusTF.getText()), Integer.valueOf(XTF.getText()),
-                            Integer.valueOf(YTF.getText()), ColorPicker.getColor());
+                    ObjectBody body = new ObjectBody(
+                        "object",
+                        velocityX,
+                        velocityY,
+                        Integer.valueOf(MassTF.getText()),
+                        Integer.valueOf(RadiusTF.getText()),
+                        Integer.valueOf(XTF.getText()),
+                        Integer.valueOf(YTF.getText()),
+                        ColorPicker.getColor()
+                    );
                     Simulation.ObjectBodyList.add(body);
+                    ObjectListPanel.refreshList();
                 } catch (NumberFormatException e1) {
                     //error message
                     System.out.println("FAILED");

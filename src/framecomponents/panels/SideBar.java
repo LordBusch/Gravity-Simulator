@@ -9,8 +9,9 @@ public class SideBar extends JPanel {
 
     private void initialize() {
         this.setPreferredSize(new Dimension(250, 1080));
-        this.setLayout(new GridLayout(2, 1));
+        this.setLayout(new GridLayout(3, 1));
         this.add(new GeneralPanel());
+        this.add(new ObjectListPanel());
         this.add(new BodyCreationPanel());
     }
 }

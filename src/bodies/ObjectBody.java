@@ -3,6 +3,7 @@ package bodies;
 import java.awt.Color;
 
 public class ObjectBody {
+    private String name;
     private double velocityX;
     private double velocityY;
     private double mass;
@@ -11,7 +12,8 @@ public class ObjectBody {
     private double y;
     private Color color;
 
-    public ObjectBody(double velocityX, double velocityY, double mass, double radius, double x, double y, Color color) {
+    public ObjectBody(String name, double velocityX, double velocityY, double mass, double radius, double x, double y, Color color) {
+        this.name = name;
         this.velocityX = velocityX;
         this.velocityY = velocityY;
         this.mass = mass;
@@ -21,6 +23,9 @@ public class ObjectBody {
         this.color = color;
     }
 
+    public String getName() {
+        return this.name;
+    }
     public double getVelocityX() {
         return this.velocityX;
     }
@@ -43,6 +48,9 @@ public class ObjectBody {
         return this.color;
     }
 
+    public void setName(String x) {
+        this.name = x;
+    }
     public void setVelocityX(double x) {
         this.velocityX = x;
     }
@@ -63,5 +71,10 @@ public class ObjectBody {
     }
     public void setColor(Color x) {
         this.color = x;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
